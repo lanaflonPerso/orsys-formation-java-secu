@@ -1,0 +1,9 @@
+
+grant
+    codeBase "file:out/production/secu"
+    principal com.sun.security.auth.UnixPrincipal "seb"
+{
+    // principal com.sun.security.auth.NTUserPrincipal "Administrateur"
+        permission java.util.PropertyPermission "user.home", "read";
+};
+

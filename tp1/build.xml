@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="TP1" basedir="." default="run">
+
+	<target name="run">
+		<echo>----------</echo>
+		<java classname="Main" fork="true">
+			<classpath>
+				<pathelement location="./out/production/main"/>
+				<pathelement location="./out/production/secu"/>
+			</classpath>
+			<jvmarg value="-Djava.security.manager" />
+			<jvmarg value="-Djava.security.policy==main.policy" />
+			<jvmarg value="-Djava.security.auth.policy==tp1.policy" />
+			<jvmarg value="-Djava.security.auth.login.config=jaas.conf" />
+		</java>
+		<echo>----------</echo>
+	</target>
+
+</project>

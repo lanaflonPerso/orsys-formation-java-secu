@@ -1,0 +1,15 @@
+
+grant
+    codeBase "file:out/production/secu"
+    principal tp2.SimplePrincipal "titi"
+{
+    permission java.util.PropertyPermission "user.home", "read";
+};
+
+grant
+    codeBase "file:out/production/secu"
+    principal tp2.SimplePrincipal "toto"
+{
+    permission java.util.PropertyPermission "java.class.path", "read";
+};
+

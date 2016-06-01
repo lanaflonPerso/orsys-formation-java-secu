@@ -1,0 +1,15 @@
+grant
+    codeBase "file:///opt/homebrew-cask/Caskroom/intellij-idea/2016.1.1/IntelliJ IDEA.app/Contents/lib/*"
+{
+    permission java.security.AllPermission;
+};
+
+grant
+    codeBase "file:out/production/main"
+{
+    permission javax.security.auth.AuthPermission "createLoginContext.TP1";
+    permission javax.security.auth.AuthPermission "doAs";
+    // permission javax.security.auth.AuthPermission "doAsPrivileged";
+    permission java.util.PropertyPermission "user.home", "read";
+
+};
