@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="gentruststore" basedir="." default="run">
+	<property name="jdk.home" 	value="C:\Program Files\Java\jdk1.8.0_31" />
+	<property name="alias" 		value="server-tp4"/>
+	<property name="storepass" 	value="myPassword"/>
+	<property name="truststore" value="./client-truststore.jks"/>
+	<property name="cert" 		value="../tp4/server-cert-4trust.cer"/>
+
+	<path id="classpath">
+		<fileset dir="${jdk.home}" includes="lib/*.jar" />
+	</path>
+
+	<target name="run">
+		<delete file="${truststore}"/>
+		<exec executable="keytool" failonerror="true">
+		    <arg value="-noprompt"/>
+		    <arg value="-importcert"/>
+		    <arg line="-keystore ${truststore}"/>
+		    <arg line="-alias ${alias}"/>
+		    <arg line="-storepass ${storepass}"/>
+		    <arg line="-file ${cert}"/>
+		</exec>	
+		
+	</target>
+		
+</project>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:jaxws="http://cxf.apache.org/jaxws"
+      xmlns:soap="http://cxf.apache.org/bindings/soap"
+      xmlns:wsa="http://cxf.apache.org/ws/addressing"
+      xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/bindings/soap http://cxf.apache.org/schemas/configuration/soap.xsd
+http://cxf.apache.org/jaxws
+http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<jaxws:endpoint 
+      id="fournisseur"
+      implementor="com.leuville.fournisseurservice.fournisseurServiceSOAPImpl"
+      address="/fournisseurService" 
+      wsdlLocation="WEB-INF/wsdl/fournisseurService.wsdl">
+
+		<jaxws:handlers>
+        	<bean id="serviceOptionsHandler"
+              		class="com.leuville.handler.LogHandler"/>
+    	</jaxws:handlers>
+
+		<jaxws:features>
+            <wsa:addressing allowDuplicates="false"/>
+        </jaxws:features>
+
+		<jaxws:properties>
+         	<entry 	key="ws-security.callback-handler" 
+         			value-ref="myPasswordCallback" />
+		</jaxws:properties> 
+
+	</jaxws:endpoint>
+
+   <bean id="myPasswordCallback" class="com.leuville.wssp.server.ServerPasswordCallback" />
+</beans>

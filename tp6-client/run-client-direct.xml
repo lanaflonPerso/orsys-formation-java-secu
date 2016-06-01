@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="client" basedir="." default="run">
+	<property name="cxf.home" location ="C:/apache-cxf-3.0.2"/>
+	
+	<property name="storepass" value="myPassword"/>
+	<property name="truststore" value="./client-truststore.jks"/>
+	<property name="keystore" value="./client-keystore.jks"/>
+
+	<path id="cxf.classpath">
+	   <fileset dir="${cxf.home}/lib">
+	      <include name="*.jar"/>
+	   </fileset>
+	</path>
+
+	<target name="run">
+		<java classname="ClientDirect" fork="true">
+			<classpath>
+				<pathelement location="./out/production/tp6-client"/>
+	            <path refid="cxf.classpath"/>
+			</classpath>
+			<jvmarg value="-Djavax.net.ssl.trustStore=${truststore}" />
+			<jvmarg value="-Djavax.net.ssl.trustStorePassword=${storepass}" />
+			<jvmarg value="-Djavax.net.ssl.keyStore=${keystore}" />
+			<jvmarg value="-Djavax.net.ssl.keyStorePassword=${storepass}" />
+		</java>
+	</target>
+		
+</project>
+

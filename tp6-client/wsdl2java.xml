@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<project name="cxf wsdl2java" basedir="." default="cxfWSDLToJava">   
+	<property name="keystore" value="./client-keystore.jks"/>
+	<property name="storepass" value="myPassword"/>
+	<property name="truststore" value="./client-truststore.jks"/>
+   	<property name="cxf.home" location ="C:/apache-cxf-3.0.2"/>
+   	<property 
+   		name="wsdl" 
+   		value="https://localhost:8443/tp6/services/fournisseurService?wsdl"
+   	/>
+	
+   <path id="cxf.classpath">
+      <fileset dir="${cxf.home}/lib">
+         <include name="*.jar"/>
+      </fileset>
+   </path>
+      
+   <target name="cxfWSDLToJava">
+      <java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true">
+         <arg value="-validate"/>
+         <arg value="-client"/>
+         <arg value="-d"/>
+         <arg value="src"/>
+         <arg value="${wsdl}"/>
+         <classpath>
+            <path refid="cxf.classpath"/>
+         </classpath>
+		<jvmarg value="-Djavax.net.ssl.keyStore=${keystore}" />
+		<jvmarg value="-Djavax.net.ssl.keyStorePassword=${storepass}" />
+		<jvmarg value="-Djavax.net.ssl.trustStore=${truststore}" />
+		<jvmarg value="-Djavax.net.ssl.trustStorePassword=${storepass}" />
+      </java>
+   </target>
+</project>

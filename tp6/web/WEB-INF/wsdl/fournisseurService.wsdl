@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://www.leuville.com/fournisseurService/" 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+    xmlns:fi="http://java.sun.com/xml/ns/wsit/2006/09/policy/fastinfoset/service"
+    xmlns:tcp="http://java.sun.com/xml/ns/wsit/2006/09/policy/soaptcp/service"
+    xmlns:sc="http://schemas.sun.com/2006/03/wss/server" 
+    xmlns:wspp="http://java.sun.com/xml/ns/wsit/policy"
+    xmlns:t="http://schemas.xmlsoap.org/ws/2005/02/trust" 
+    xmlns:wsaw="http://www.w3.org/2005/08/addressing"
+    xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" 
+    xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy"
+    xmlns:tc="http://schemas.sun.com/ws/2006/05/trust/server" 
+	name="fournisseurService"
+	targetNamespace="http://www.leuville.com/fournisseurService/">
+	
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.leuville.com/fournisseurService/" elementFormDefault="qualified" >
+      <xsd:element name="getPrix">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="code-produit" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getPrixResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="prix" type="xsd:float" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="commander">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="commande">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="ligne-produit" minOccurs="1" maxOccurs="unbounded">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element name="code-produit" type="xsd:string" />
+                        <xsd:element name="quantite" type="xsd:int" />
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="commanderResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="commanderResult" type="xsd:boolean" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getPrixRequest">
+    <wsdl:part element="tns:getPrix" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="getPrixResponse">
+    <wsdl:part element="tns:getPrixResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="commanderRequest">
+    <wsdl:part element="tns:commander" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="commanderResponse">
+    <wsdl:part element="tns:commanderResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:portType name="fournisseurService">
+    <wsdl:operation name="getPrix">
+      <wsdl:input message="tns:getPrixRequest" />
+      <wsdl:output message="tns:getPrixResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="commander">
+      <wsdl:input message="tns:commanderRequest" />
+      <wsdl:output message="tns:commanderResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="fournisseurServiceSOAP" type="tns:fournisseurService">
+    <wsp:PolicyReference URI="#MyBindingPolicy" />
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getPrix">
+      <soap:operation soapAction="http://www.leuville.com/fournisseurService/getPrix" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="commander">
+      <soap:operation	soapAction="http://www.leuville.com/fournisseurService/commander" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="fournisseurService">
+    <wsdl:port binding="tns:fournisseurServiceSOAP" name="fournisseurServiceSOAP">
+      <soap:address location="http://localhost:8080/CXF_WSDL2JAVA_WSSP_TOMCAT/services/fournisseurService" />
+<!--       <soap:address location="https://localhost:8443/CXF_WSDL2JAVA_WSSP_TOMCAT/services/fournisseurService" /> -->
+    </wsdl:port>
+  </wsdl:service>
+  
+     <wsp:Policy wsu:Id="MyBindingPolicy">
+      <wsp:ExactlyOne>
+         <wsp:All>
+            <wsaw:UsingAddressing
+               xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+               wsp:Optional="false" />
+            <sp:TransportBinding>
+               <wsp:Policy>
+                  <sp:TransportToken>
+                     <wsp:Policy>
+                        <sp:HttpsToken
+                           RequireClientCertificate="false" />
+                     </wsp:Policy>
+                  </sp:TransportToken>
+                  <sp:Layout>
+                     <wsp:Policy>
+                        <sp:Lax />
+                     </wsp:Policy>
+                  </sp:Layout>
+                  <sp:IncludeTimestamp/>
+                  <sp:AlgorithmSuite>
+                     <wsp:Policy>
+                        <sp:Basic128 />
+                     </wsp:Policy>
+                  </sp:AlgorithmSuite>
+               </wsp:Policy>
+            </sp:TransportBinding>
+            <sp:SignedSupportingTokens>
+               <wsp:Policy>
+                  <sp:UsernameToken
+                     sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                     <wsp:Policy>
+                        <sp:WssUsernameToken10 />
+                     </wsp:Policy>
+                  </sp:UsernameToken>
+               </wsp:Policy>
+            </sp:SignedSupportingTokens>
+            <sp:Wss11 />
+         </wsp:All>
+      </wsp:ExactlyOne>
+   </wsp:Policy>
+
+</wsdl:definitions>
